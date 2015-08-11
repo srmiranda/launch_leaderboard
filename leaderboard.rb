@@ -38,15 +38,15 @@ class Team
   end
 
   def add_wins
-    @wins += 1
+    self.wins += 1
   end
 
   def add_losses
-    @losses += 1
+    self.losses += 1
   end
 
   def add_rank
-    @rank += 1
+    rank += 1
   end
 
   def summary
@@ -61,17 +61,18 @@ end
 
 teams = {}
 
+def create_team(team_name, teams)
+  if !teams.has_key?(team_name)
+    teams[team_name] = Team.new(team_name)
+  end
+end
+
 game_info.each do |info|
   home_team = info[:home_team]
   away_team = info[:away_team]
 
-  if !teams.has_key?(home_team)
-    home_team = Team.new(home_team)
-    teams[home_team.name] = home_team
-  elsif !teams.has_key?(away_team)
-    away_team = Team.new(away_team)
-    teams[away_team.name] = away_team
-  end
+  create_team(home_team, teams)
+  create_team(away_team, teams)
 end
 
 game_info.each do |info|
@@ -84,11 +85,11 @@ game_info.each do |info|
  end
 end
 
-rank_teams = teams.sort_by {|team, info| info.losses}
+rank_teams = teams.sort_by {|team_name, team| [-team.wins, team.losses]}
 
 rank = 1
-rank_teams.each do |team, info|
-  info.rank += rank
+rank_teams.each do |team_name, team|
+  team.rank += rank
   rank += 1
 end
 

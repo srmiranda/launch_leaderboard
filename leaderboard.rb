@@ -29,7 +29,7 @@ def game_info
 end
 
 class Team
-  attr_accessor :name, :rank, :wins, :losses, :add_wins
+  attr_accessor :name, :rank, :wins, :losses, :add_wins, :add_rank
   def initialize(name, rank=0, wins=0, losses=0)
     @name   = name
     @rank   = rank
@@ -45,6 +45,18 @@ class Team
     @losses += 1
   end
 
+  def add_rank
+    @rank += 1
+  end
+
+  def summary
+    summary = "| "
+    summary += "#{@name}".ljust(10)
+    summary += "#{@rank}".ljust(10)
+    summary += "#{@wins}".ljust(14)
+    summary += "#{@losses}".ljust(13)
+    summary += "|"
+  end
 end
 
 teams = {}
@@ -74,4 +86,17 @@ game_info.each do |info|
  end
 end
 
-puts teams
+rank_teams = teams.sort_by {|team, info| info.losses}
+
+rank = 1
+rank_teams.each do |team, info|
+  info.rank += rank
+  rank += 1
+end
+
+
+puts "--------------------------------------------------"
+header = "| Name      Rank      Total Wins    Total Losses |"
+puts header
+rank_teams.each {|team, info| puts "#{info.summary}"}
+puts "--------------------------------------------------"

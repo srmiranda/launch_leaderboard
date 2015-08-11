@@ -29,7 +29,7 @@ def game_info
 end
 
 class Team
-  attr_accessor :name, :rank, :wins, :losses, :add_wins, :add_rank
+  attr_accessor :name, :rank, :wins, :losses
   def initialize(name, rank=0, wins=0, losses=0)
     @name   = name
     @rank   = rank
@@ -68,9 +68,7 @@ game_info.each do |info|
   if !teams.has_key?(home_team)
     home_team = Team.new(home_team)
     teams[home_team.name] = home_team
-  end
-
-  if !teams.has_key?(away_team)
+  elsif !teams.has_key?(away_team)
     away_team = Team.new(away_team)
     teams[away_team.name] = away_team
   end
@@ -93,7 +91,6 @@ rank_teams.each do |team, info|
   info.rank += rank
   rank += 1
 end
-
 
 puts "--------------------------------------------------"
 header = "| Name      Rank      Total Wins    Total Losses |"
